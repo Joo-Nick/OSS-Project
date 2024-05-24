@@ -2,6 +2,7 @@
 # by. BlockDMask
 import pygame
 import sys
+from src.obstacle import Tree
 
 # step1 : set screen, fps
 # step2 : show dino, jump dino
@@ -19,8 +20,8 @@ def main():
     fps = pygame.time.Clock()
 
     # dino
-    imgDino1 = pygame.image.load('images/dino1.png')
-    imgDino2 = pygame.image.load('images/dino2.png')
+    imgDino1 = pygame.image.load('Python_dinosaur_game/images/dino1.png')
+    imgDino2 = pygame.image.load('Python_dinosaur_game/images/dino2.png')
     dino_height = imgDino1.get_size()[1]
     dino_bottom = MAX_HEIGHT - dino_height
     dino_x = 50
@@ -31,10 +32,7 @@ def main():
     is_go_up = False
 
     # tree
-    imgTree = pygame.image.load('images/tree.png')
-    tree_height = imgTree.get_size()[1]
-    tree_x = MAX_WIDTH
-    tree_y = MAX_HEIGHT - tree_height
+    tree = Tree(screen, 'Python_dinosaur_game/images/tree.png', MAX_WIDTH, MAX_HEIGHT)
 
     while True:
         screen.fill((255, 255, 255))
@@ -64,12 +62,12 @@ def main():
             dino_y = dino_bottom
 
         # tree move
-        tree_x -= 12.0
-        if tree_x <= 0:
-            tree_x = MAX_WIDTH
+        tree.move()
+
 
         # draw tree
-        screen.blit(imgTree, (tree_x, tree_y))
+        tree.draw()
+
 
         # draw dino
         if leg_swap:
