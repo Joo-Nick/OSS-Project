@@ -2,6 +2,8 @@
 # by. BlockDMask
 import pygame
 import sys
+from src.obstacle import Tree
+from src.dino import Dino
 from src.obstacle import Tree, FlyingObstacle
 
 # step1 : set screen, fps
@@ -18,18 +20,10 @@ def main():
     # set screen, fps
     screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
     fps = pygame.time.Clock()
+    run = True
 
     # dino
-    imgDino1 = pygame.image.load('Python_dinosaur_game/images/dino1.png')
-    imgDino2 = pygame.image.load('Python_dinosaur_game/images/dino2.png')
-    dino_height = imgDino1.get_size()[1]
-    dino_bottom = MAX_HEIGHT - dino_height
-    dino_x = 50
-    dino_y = dino_bottom
-    jump_top = 200
-    leg_swap = True
-    is_bottom = True
-    is_go_up = False
+    dino = Dino()
 
     # tree 인스턴스 생성
     tree = Tree(screen, 'Python_dinosaur_game/images/tree.png', MAX_WIDTH, MAX_HEIGHT)
@@ -37,35 +31,20 @@ def main():
     # flying_obstacle 인스턴스 생성
     flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/flying_obstacle.png', MAX_WIDTH, MAX_HEIGHT)
 
-    while True:
+    while run:
         screen.fill((255, 255, 255))
+        userinput = pygame.key.get_pressed()
 
         # event check
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if is_bottom:
-                    is_go_up = True
-                    is_bottom = False
-
-        # dino move
-        if is_go_up:
-            dino_y -= 10.0
-        elif not is_go_up and not is_bottom:
-            dino_y += 10.0
-
-        # dino top and bottom check
-        if is_go_up and dino_y <= jump_top:
-            is_go_up = False
-
-        if not is_bottom and dino_y >= dino_bottom:
-            is_bottom = True
-            dino_y = dino_bottom
+                run = False
 
         # tree move
         tree.move()
+
+        # draw tree
+        tree.draw()
 
         # flying obstacle move
         flying_obstacle.move()
@@ -77,13 +56,8 @@ def main():
         flying_obstacle.draw()
 
         # draw dino
-        if leg_swap:
-            screen.blit(imgDino1, (dino_x, dino_y))
-            leg_swap = False
-        else:
-            screen.blit(imgDino2, (dino_x, dino_y))
-            leg_swap = True
-
+        dino.draw(screen)
+        dino.dinoupdate(userinput)
         # update
         pygame.display.update()
         fps.tick(30)
