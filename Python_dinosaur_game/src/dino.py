@@ -1,9 +1,9 @@
 import pygame
 
 class Dino:
-    dino_x = 50
-    dino_y = 305
-    dino_y_duck = 335
+    dino_x = 10
+    dino_y = 265
+    dino_y_duck = 295
     JUMP_VEL = 6.5
 
     def __init__(self):
