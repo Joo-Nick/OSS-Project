@@ -24,10 +24,10 @@ def main():
     dino = Dino()
 
     # tree 인스턴스 생성
-    tree = Tree(screen, 'Python_dinosaur_game/images/tree.png', MAX_WIDTH, MAX_HEIGHT)
-    
+    tree = Tree(screen, 'Python_dinosaur_game/images/Obstacle/Tree.png')
+
     # flying_obstacle 인스턴스 생성
-    flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/flying_obstacle.png', MAX_WIDTH, MAX_HEIGHT)
+    flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
 
     # Cloud 인스턴스 생성
     cloud = Cloud()
@@ -49,9 +49,6 @@ def main():
 
         # flying obstacle move
         flying_obstacle.move()
-
-        # draw tree
-        tree.draw()
 
         # draw flying obstacle
         flying_obstacle.draw()
