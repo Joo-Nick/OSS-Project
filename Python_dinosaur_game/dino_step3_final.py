@@ -1,28 +1,26 @@
 # python game with pygame : Jumping dino
 # by. BlockDMask
 import pygame
+import random
 import sys
 from src.obstacle import Tree
 from src.dino import Dino
 from src.obstacle import Tree, FlyingObstacle
-
-# step1 : set screen, fps
-# step2 : show dino, jump dino
-# step3 : show tree, move tree
+from src.cloud import Cloud
+from src.background import background
 
 pygame.init()
 pygame.display.set_caption('Jumping dino')
 MAX_WIDTH = 800
 MAX_HEIGHT = 400
-
+gamespeed = 12
+screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
 def main():
     # set screen, fps
-    screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
     fps = pygame.time.Clock()
     run = True
-
-    # dino
+    # dino 인스턴스 생성
     dino = Dino()
 
     # tree 인스턴스 생성
@@ -30,6 +28,9 @@ def main():
     
     # flying_obstacle 인스턴스 생성
     flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/flying_obstacle.png', MAX_WIDTH, MAX_HEIGHT)
+
+    # Cloud 인스턴스 생성
+    cloud = Cloud()
 
     while run:
         screen.fill((255, 255, 255))
@@ -58,6 +59,14 @@ def main():
         # draw dino
         dino.draw(screen)
         dino.dinoupdate(userinput)
+
+        # draw cloud
+        cloud.draw(screen)
+        cloud.update()
+
+        # background
+        background()
+
         # update
         pygame.display.update()
         fps.tick(30)
