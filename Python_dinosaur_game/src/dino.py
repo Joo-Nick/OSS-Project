@@ -25,7 +25,7 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y
 
-    def dinoupdate(self, userInput): # 키 지정
+    def dinoupdate(self, userInput):
         if self.dino_duck:
             self.duck()
         if self.dino_run:
@@ -36,11 +36,11 @@ class Dino:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if userInput[pygame.K_UP] and not self.dino_jump:
+        if userInput[pygame.K_UP] or userInput[pygame.K_SPACE] and not self.dino_jump: # 점프 키 지정
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
-        elif userInput[pygame.K_DOWN] and not self.dino_jump:
+        elif userInput[pygame.K_DOWN] and not self.dino_jump: # 슬라이딩 키 지정
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
