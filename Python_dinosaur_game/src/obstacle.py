@@ -1,41 +1,36 @@
 import pygame
 
-class Tree:
-    def __init__(self, screen, img_path='Python_dinosaur_game/images/tree.png', max_width=800, max_height=600):
+class Obstacle:
+    def __init__(self, screen, img_path, speed, start_y, y_pos_bg): # y_pos_bg는 src/background.py의 높이
         self.screen = screen
         self.image = pygame.image.load(img_path)
-        
-        tree_height = self.image.get_height()
-        
-        self.x = max_width
-        self.y = max_height - tree_height
-        self.speed = 12
+        self.rect = self.image.get_rect()  # 이미지의 사각형 충돌 영역
+        self.x = screen.get_width()  # 화면의 너비를 가져와 시작 위치 사용
+        self.y = start_y
+        self.speed = speed
+        self.y_pos_bg = y_pos_bg
 
     def move(self):
         self.x -= self.speed
         if self.x <= 0:
-            self.x = 800
-
+            self.x = self.screen.get_width()
+        self.rect.topleft = (self.x, self.y)  # 이미지 위치에 맞게 충돌 영역 업데이트
+    
     def draw(self):
-        self.screen.blit(self.image, (self.x, self.y))
-        
-class FlyingObstacle:
-    def __init__(self, screen, img_path='Python_dinosaur_game/images/flying_obstacle.png', max_width=800, max_height=400):
-        self.screen = screen
-        self.image = pygame.image.load(img_path)
-        self.x = max_width
-        self.y = 0  # 화면의 상단에서 시작
-        self.speed = 7
+        self.screen.blit(self.image, self.rect.topleft)
+
+class Tree(Obstacle):
+    def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/Tree.png', y_pos_bg=330): 
+        tree_height = pygame.image.load(img_path).get_height()
+        super().__init__(screen, img_path, 12, y_pos_bg - tree_height + 10, y_pos_bg) # + 10은 images/Other/Track.png 이미지의 위쪽 공백에 대한 보정
+
+class FlyingObstacle(Obstacle):
+    def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/FlyingObstacle.png', y_pos_bg=330):
+        super().__init__(screen, img_path, 7, 0, y_pos_bg)  
         self.direction = 1  # 지그재그 움직임을 위한 방향 변수
 
     def move(self):
-        self.x -= self.speed # 가로방향의 속도
+        super().move()
         self.y += self.direction * 12  # 세로방향의 속도
-        if self.y <= 0 or self.y >= (300 - self.image.get_height()):  # 상하 이동 범위 제한
+        if self.y <= 0 or self.y >= (self.y_pos_bg - self.image.get_height()):  # 상하 이동 범위 제한
             self.direction *= -1  # 방향 전환
-
-        if self.x <= 0:
-            self.x = 800
-
-    def draw(self):
-        self.screen.blit(self.image, (self.x, self.y))
