@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Obstacle:
     def __init__(self, screen, img_path, speed, start_y, y_pos_bg): # y_pos_bg는 src/background.py의 높이
@@ -34,3 +35,8 @@ class FlyingObstacle(Obstacle):
         self.y += self.direction * 12  # 세로방향의 속도
         if self.y <= 0 or self.y >= (self.y_pos_bg - self.image.get_height()):  # 상하 이동 범위 제한
             self.direction *= -1  # 방향 전환
+            
+class Trap(Obstacle):
+    def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/Trap.png', y_pos_bg=330):
+        super().__init__(screen, img_path, 12, y_pos_bg - 20, y_pos_bg)  # 속도 조정하여 tree와 같은 속도로 움직이도록 함
+        self.x = screen.get_width() - 300  # 트랩이 트리 옆에 위치하도록 x 위치 조정

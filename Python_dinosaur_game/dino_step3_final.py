@@ -5,7 +5,7 @@ import random
 import sys
 from src.obstacle import Tree
 from src.dino import Dino
-from src.obstacle import Tree, FlyingObstacle
+from src.obstacle import Tree, FlyingObstacle, Trap
 from src.cloud import Cloud
 from src.background import background
 
@@ -15,6 +15,7 @@ MAX_WIDTH = 800
 MAX_HEIGHT = 400
 gamespeed = 12
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
+
 
 def main():
     # set screen, fps
@@ -28,9 +29,13 @@ def main():
 
     # flying_obstacle 인스턴스 생성
     flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
+    
+    # trap 인스턴스 생성
+    trap = Trap(screen, 'Python_dinosaur_game/images/Obstacle/Trap.png')
 
     # Cloud 인스턴스 생성
     cloud = Cloud()
+    
 
     while run:
         screen.fill((255, 255, 255))
@@ -52,7 +57,13 @@ def main():
 
         # draw flying obstacle
         flying_obstacle.draw()
-
+        
+        # trap move
+        trap.move()
+        
+        # draw trap
+        trap.draw()
+            
         # draw dino
         dino.draw(screen)
         dino.dinoupdate(userinput)
