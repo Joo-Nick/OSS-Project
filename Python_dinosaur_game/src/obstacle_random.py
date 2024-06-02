@@ -1,7 +1,7 @@
 import pygame
 import random
 
-class Obstacle:
+class Obstacle_random:
     def __init__(self, screen, img_path, speed, start_y, y_pos_bg): # y_pos_bg는 src/background.py의 높이
         self.screen = screen
         self.image = pygame.image.load(img_path)
@@ -11,38 +11,20 @@ class Obstacle:
         self.speed = speed
         self.y_pos_bg = y_pos_bg
 
-    def move(self):
+    def move_random(self):
         self.x -= self.speed
-        if self.x <= 0:
-            self.x = self.screen.get_width()
         self.rect.topleft = (self.x, self.y)  # 이미지 위치에 맞게 충돌 영역 업데이트
     
-    def draw(self):
+    def draw_random(self):
         self.screen.blit(self.image, self.rect.topleft)
-
-class Tree(Obstacle):
-    def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/Tree.png', y_pos_bg=330): 
-        tree_height = pygame.image.load(img_path).get_height()
-        super().__init__(screen, img_path, 12, y_pos_bg - tree_height + 10, y_pos_bg) # + 10은 images/Other/Track.png 이미지의 위쪽 공백에 대한 보정
-
-class FlyingObstacle(Obstacle):
-    def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/FlyingObstacle.png', y_pos_bg=330):
-        super().__init__(screen, img_path, 7, 0, y_pos_bg)  
-        self.direction = 1  # 지그재그 움직임을 위한 방향 변수
-
-    def move(self):
-        super().move()
-        self.y += self.direction * 12  # 세로방향의 속도
-        if self.y <= 0 or self.y >= (self.y_pos_bg - self.image.get_height()):  # 상하 이동 범위 제한
-            self.direction *= -1  # 방향 전환
-            
-'''class Trap(Obstacle):
+        
+class Trap(Obstacle_random):
     def __init__(self, screen, img_path='Python_dinosaur_game/images/Obstacle/Trap.png', y_pos_bg=330):
         super().__init__(screen, img_path, 12, y_pos_bg - 20, y_pos_bg)  # 속도 조정하여 tree와 같은 속도로 움직이도록 함
         self.initial_x = self.x  # 트랩 생성 시 x 좌표 저장
         
     def move_random(self):
-        super().move()
+        super().move_random()
         if self.x <= self.initial_x - self.screen.get_width():  # 초기 위치에서 화면 너비만큼 이동했을 때 삭제
             return False  # 삭제 신호 반환
-        return True  # 유지 신호 반환'''
+        return True  # 유지 신호 반환
