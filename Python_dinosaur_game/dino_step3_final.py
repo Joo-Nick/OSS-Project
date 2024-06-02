@@ -20,7 +20,7 @@ def main():
     run = True
     gamespeed = 12
     death_count = 0
-    trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격 (변경 가능)
+    trap_spawn_time = random.randint(2000, 5000)  # 2초에서 5초 사이의 랜덤 시간 간격
     last_trap_spawn = pygame.time.get_ticks()
 
     # dino 인스턴스 생성
@@ -69,8 +69,10 @@ def main():
         if current_time - last_trap_spawn > trap_spawn_time:
             new_trap = Trap(screen, 'Python_dinosaur_game/images/Obstacle/Trap.png')
             traps.append(new_trap)
+            new_trap.set_tree_x(tree.x)  # 나무의 x 좌표 설정
+            new_trap.x = new_trap.generate_random_x()  # 랜덤한 x 좌표 생성
             last_trap_spawn = current_time
-            trap_spawn_time = random.randint(1000, 5000)  # 다음 트랩 생성 시간 갱신
+            trap_spawn_time = random.randint(2000, 5000)  # 다음 트랩 생성 시간 갱신
 
         # trap move and draw
         for trap in traps[:]:
