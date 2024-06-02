@@ -4,7 +4,8 @@ import pygame
 import random
 import sys
 from src.dino import Dino
-from src.obstacle import Tree, FlyingObstacle, Trap
+from src.obstacle import Tree, FlyingObstacle
+from src.obstacle_random import Trap
 from src.cloud import Cloud
 from src.background import background
 
@@ -20,22 +21,24 @@ def main():
     fps = pygame.time.Clock()
     run = True
     gamespeed = 12
+    trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격
+    last_trap_spawn = pygame.time.get_ticks()
+
 
     # dino 인스턴스 생성
     dino = Dino()
-
+    
     # tree 인스턴스 생성
     tree = Tree(screen, 'Python_dinosaur_game/images/Obstacle/Tree.png')
 
     # flying_obstacle 인스턴스 생성
     flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
-    
-    # trap 인스턴스 생성
-    trap = Trap(screen, 'Python_dinosaur_game/images/Obstacle/Trap.png')
 
+    # trap 리스트 생성
+    traps = []
+    
     # Cloud 인스턴스 생성
     cloud = Cloud()
-    
 
     while run:
         screen.fill((255, 255, 255))
@@ -45,7 +48,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
+                
+        
         # tree move
         tree.move()
 
@@ -58,12 +62,23 @@ def main():
         # draw flying obstacle
         flying_obstacle.draw()
         
-        # trap move
-        trap.move()
+        # 현재 시간 체크
+        current_time = pygame.time.get_ticks()
         
-        # draw trap
-        trap.draw()
-            
+        # trap 생성
+        if current_time - last_trap_spawn > trap_spawn_time:
+            new_trap = Trap(screen, 'Python_dinosaur_game/images/Obstacle/Trap.png')
+            traps.append(new_trap)
+            last_trap_spawn = current_time
+            trap_spawn_time = random.randint(1000, 5000)  # 다음 트랩 생성 시간 갱신
+
+        # trap move and draw
+        for trap in traps[:]:
+            if not trap.move_random():
+                traps.remove(trap)
+            else:
+                trap.draw_random()
+                
         # draw dino
         dino.draw(screen)
         dino.dinoupdate(userinput)
@@ -78,7 +93,7 @@ def main():
         # update
         pygame.display.update()
         fps.tick(30)
-
+        
 
 def menu(death_count):
     global points
@@ -110,6 +125,5 @@ def menu(death_count):
                 run = False
             if event.type == pygame.KEYDOWN:
                 main()
-
-
+    
 menu(death_count=0)
