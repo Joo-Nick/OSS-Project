@@ -1,8 +1,7 @@
-# python game with pygame : Jumping dino
-# by. BlockDMask
 import pygame
 import random
 import sys
+import os
 from src.dino import Dino
 from src.obstacle import Tree, FlyingObstacle
 from src.obstacle_random import Trap
@@ -15,7 +14,6 @@ MAX_WIDTH = 800
 MAX_HEIGHT = 400
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
-
 def main():
     # 변수 설정
     fps = pygame.time.Clock()
@@ -24,15 +22,17 @@ def main():
     trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격 (변경 가능)
     last_trap_spawn = pygame.time.get_ticks()
 
-
     # dino 인스턴스 생성
     dino = Dino()
-    
+
+    # 현재 파일의 디렉토리 경로 가져오기
+    base_path = os.path.dirname(__file__)
+
     # tree 인스턴스 생성
-    tree = Tree(screen, 'Python_dinosaur_game/images/Obstacle/Tree.png')
+    tree = Tree(screen, os.path.join(base_path, 'images/Obstacle/Tree.png'))
 
     # flying_obstacle 인스턴스 생성
-    flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
+    flying_obstacle = FlyingObstacle(screen, os.path.join(base_path, 'images/Obstacle/FlyingObstacle.png'))
 
     # trap 리스트 생성
     traps = []
@@ -49,7 +49,6 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 
-        
         # tree move
         tree.move()
 
@@ -93,16 +92,15 @@ def main():
         # update
         pygame.display.update()
         fps.tick(30)
-        
 
 def menu(death_count):
-    global points
     run = True
+    base_path = os.path.dirname(__file__)
     while run:
         font = pygame.font.Font('freesansbold.ttf', 30)
-        RunDino = pygame.image.load('Python_dinosaur_game/images/Dino/DinoRun1.png')
-        GameoverImg = pygame.image.load('Python_dinosaur_game/images/Other/Gameover.png')
-        ResetImg = pygame.image.load('Python_dinosaur_game/images/Other/Reset.png')
+        RunDino = pygame.image.load(os.path.join(base_path, 'images/Dino/DinoRun1.png'))
+        GameoverImg = pygame.image.load(os.path.join(base_path, 'images/Other/Gameover.png'))
+        ResetImg = pygame.image.load(os.path.join(base_path, 'images/Other/Reset.png'))
 
         if death_count == 0:
             screen.fill((255, 255, 255))
@@ -117,7 +115,7 @@ def menu(death_count):
             resetRect = ResetImg.get_rect()
             resetRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2 + 50)
             screen.blit(GameoverImg, gameoverRect)
-            screen.blit(ResetImg,resetRect)
+            screen.blit(ResetImg, resetRect)
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -125,5 +123,5 @@ def menu(death_count):
                 run = False
             if event.type == pygame.KEYDOWN:
                 main()
-    
+
 menu(death_count=0)
