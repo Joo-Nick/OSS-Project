@@ -4,7 +4,7 @@ import pygame
 import random
 import sys
 from src.dino import Dino
-from src.obstacle import Tree, FlyingObstacle
+from src.obstacle import Cactus, Bird, manage_obstacles
 from src.cloud import Cloud
 from src.background import background
 
@@ -12,6 +12,7 @@ pygame.init()
 pygame.display.set_caption('Jumping dino')
 MAX_WIDTH = 800
 MAX_HEIGHT = 400
+y_pos_bg = 330
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
 def main():
@@ -23,12 +24,12 @@ def main():
     # dino 인스턴스 생성
     dino = Dino()
 
-    # tree 인스턴스 생성
-    tree = Tree(screen, 'Python_dinosaur_game/images/Obstacle/Tree.png')
+    # 장애물 그룹 생성
+    obstacles = pygame.sprite.Group()
 
-    # flying_obstacle 인스턴스 생성
-    flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
-
+    # 시간 추적을 위한 변수
+    last_obstacle_time = pygame.time.get_ticks()
+    
     # Cloud 인스턴스 생성
     cloud = Cloud()
 
@@ -41,18 +42,13 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-        # tree move
-        tree.move()
+        # management obsacle
+        current_time = pygame.time.get_ticks()
+        last_obstacle_time = manage_obstacles(obstacles, last_obstacle_time, current_time)
 
-        # draw tree
-        tree.draw()
-
-        # flying obstacle move
-        flying_obstacle.move()
-
-        # draw flying obstacle
-        flying_obstacle.draw()
-
+        obstacles.update()
+        obstacles.draw(screen)
+        
         # draw dino
         dino.draw(screen)
         dino.dinoupdate(userinput)
@@ -99,6 +95,5 @@ def menu(death_count):
                 run = False
             if event.type == pygame.KEYDOWN:
                 main()
-
 
 menu(death_count=0)
