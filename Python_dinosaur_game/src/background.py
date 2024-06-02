@@ -1,5 +1,5 @@
 import pygame
-import random
+import os
 
 MAX_WIDTH = 800
 MAX_HEIGHT = 400
@@ -8,10 +8,10 @@ screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 x_pos_bg = 0
 y_pos_bg = 330
 
-BG = pygame.image.load('Python_dinosaur_game/images/Other/Track.png')
-
 def background():
     global x_pos_bg, y_pos_bg
+    base_path = os.path.dirname(__file__)
+    BG = pygame.image.load(os.path.join(base_path, '../images/Other/Track.png'))
     image_width = BG.get_width()
     screen.blit(BG, (x_pos_bg, y_pos_bg))
     screen.blit(BG, (image_width + x_pos_bg, y_pos_bg))
