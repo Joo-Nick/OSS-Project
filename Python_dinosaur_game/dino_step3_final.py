@@ -21,7 +21,7 @@ def main():
     fps = pygame.time.Clock()
     run = True
     gamespeed = 12
-    trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격
+    trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격 (변경 가능)
     last_trap_spawn = pygame.time.get_ticks()
 
 
