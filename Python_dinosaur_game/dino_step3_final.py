@@ -3,7 +3,6 @@
 import pygame
 import random
 import sys
-from src.obstacle import Tree
 from src.dino import Dino
 from src.obstacle import Tree, FlyingObstacle, Trap
 from src.cloud import Cloud
@@ -13,14 +12,15 @@ pygame.init()
 pygame.display.set_caption('Jumping dino')
 MAX_WIDTH = 800
 MAX_HEIGHT = 400
-gamespeed = 12
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
 
 def main():
-    # set screen, fps
+    # 변수 설정
     fps = pygame.time.Clock()
     run = True
+    gamespeed = 12
+
     # dino 인스턴스 생성
     dino = Dino()
 
@@ -80,5 +80,36 @@ def main():
         fps.tick(30)
 
 
-if __name__ == '__main__':
-    main()
+def menu(death_count):
+    global points
+    run = True
+    while run:
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        RunDino = pygame.image.load('Python_dinosaur_game/images/Dino/DinoRun1.png')
+        GameoverImg = pygame.image.load('Python_dinosaur_game/images/Other/Gameover.png')
+        ResetImg = pygame.image.load('Python_dinosaur_game/images/Other/Reset.png')
+
+        if death_count == 0:
+            screen.fill((255, 255, 255))
+            text = font.render("Press any Key to Start", True, (0, 0, 0))
+            textRect = text.get_rect()
+            textRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2)
+            screen.blit(text, textRect)
+            screen.blit(RunDino, (MAX_WIDTH // 2 - 20, MAX_HEIGHT // 2 - 140))
+        elif death_count > 0:
+            gameoverRect = GameoverImg.get_rect()
+            gameoverRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2 - 50)
+            resetRect = ResetImg.get_rect()
+            resetRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2 + 50)
+            screen.blit(GameoverImg, gameoverRect)
+            screen.blit(ResetImg,resetRect)
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                main()
+
+
+menu(death_count=0)
