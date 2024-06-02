@@ -1,4 +1,5 @@
 import pygame
+import os
 
 class Dino:
     dino_x = 10
@@ -7,11 +8,13 @@ class Dino:
     JUMP_VEL = 6.5
 
     def __init__(self):
-        self.RunDinoImg = [pygame.image.load('Python_dinosaur_game/images/Dino/DinoRun1.png'),
-                        pygame.image.load('Python_dinosaur_game/images/Dino/DinoRun2.png')]
-        self.JumpDinoImg = pygame.image.load('Python_dinosaur_game/images/Dino/DinoJump.png')
-        self.DuckDinoImg = [pygame.image.load('Python_dinosaur_game/images/Dino/DinoDuck1.png'),
-                        pygame.image.load('Python_dinosaur_game/images/Dino/DinoDuck2.png')]
+        base_path = os.path.dirname(__file__)
+        self.base_path = base_path
+        self.RunDinoImg = [pygame.image.load(os.path.join(base_path, '../images/Dino/DinoRun1.png')),
+                           pygame.image.load(os.path.join(base_path, '../images/Dino/DinoRun2.png'))]
+        self.JumpDinoImg = pygame.image.load(os.path.join(base_path, '../images/Dino/DinoJump.png'))
+        self.DuckDinoImg = [pygame.image.load(os.path.join(base_path, '../images/Dino/DinoDuck1.png')),
+                            pygame.image.load(os.path.join(base_path, '../images/Dino/DinoDuck2.png'))]
 
         self.dino_duck = False
         self.dino_run = True

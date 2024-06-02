@@ -1,8 +1,7 @@
-# python game with pygame : Jumping dino
-# by. BlockDMask
 import pygame
 import random
 import sys
+import os
 from src.dino import Dino
 from src.obstacle import Tree, FlyingObstacle
 from src.cloud import Cloud
@@ -23,11 +22,14 @@ def main():
     # dino 인스턴스 생성
     dino = Dino()
 
+    # 현재 파일의 디렉토리 경로 가져오기
+    base_path = os.path.dirname(__file__)
+
     # tree 인스턴스 생성
-    tree = Tree(screen, 'Python_dinosaur_game/images/Obstacle/Tree.png')
+    tree = Tree(screen, os.path.join(base_path, 'images/Obstacle/Tree.png'))
 
     # flying_obstacle 인스턴스 생성
-    flying_obstacle = FlyingObstacle(screen, 'Python_dinosaur_game/images/Obstacle/FlyingObstacle.png')
+    flying_obstacle = FlyingObstacle(screen, os.path.join(base_path, 'images/Obstacle/FlyingObstacle.png'))
 
     # Cloud 인스턴스 생성
     cloud = Cloud()
@@ -68,15 +70,14 @@ def main():
         pygame.display.update()
         fps.tick(30)
 
-
 def menu(death_count):
-    global points
     run = True
+    base_path = os.path.dirname(__file__)
     while run:
         font = pygame.font.Font('freesansbold.ttf', 30)
-        RunDino = pygame.image.load('Python_dinosaur_game/images/Dino/DinoRun1.png')
-        GameoverImg = pygame.image.load('Python_dinosaur_game/images/Other/Gameover.png')
-        ResetImg = pygame.image.load('Python_dinosaur_game/images/Other/Reset.png')
+        RunDino = pygame.image.load(os.path.join(base_path, 'images/Dino/DinoRun1.png'))
+        GameoverImg = pygame.image.load(os.path.join(base_path, 'images/Other/Gameover.png'))
+        ResetImg = pygame.image.load(os.path.join(base_path, 'images/Other/Reset.png'))
 
         if death_count == 0:
             screen.fill((255, 255, 255))
@@ -91,7 +92,7 @@ def menu(death_count):
             resetRect = ResetImg.get_rect()
             resetRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2 + 50)
             screen.blit(GameoverImg, gameoverRect)
-            screen.blit(ResetImg,resetRect)
+            screen.blit(ResetImg, resetRect)
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -99,6 +100,5 @@ def menu(death_count):
                 run = False
             if event.type == pygame.KEYDOWN:
                 main()
-
 
 menu(death_count=0)
