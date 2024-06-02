@@ -15,10 +15,12 @@ class Dino:
         self.JumpDinoImg = pygame.image.load(os.path.join(base_path, '../images/Dino/DinoJump.png'))
         self.DuckDinoImg = [pygame.image.load(os.path.join(base_path, '../images/Dino/DinoDuck1.png')),
                             pygame.image.load(os.path.join(base_path, '../images/Dino/DinoDuck2.png'))]
+        self.DeadDinoImg = pygame.image.load(os.path.join(base_path, '../images/Dino/DinoDead.png'))
 
         self.dino_duck = False
         self.dino_run = True
         self.dino_jump = False
+        self.dino_dead = False
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
@@ -35,6 +37,8 @@ class Dino:
             self.run()
         if self.dino_jump:
             self.jump()
+        if self.dino_dead:
+            self.dead()
 
         if self.step_index >= 10:
             self.step_index = 0
@@ -74,6 +78,11 @@ class Dino:
         if self.jump_vel < - self.JUMP_VEL:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
-
+    def dead(self):
+        self.image = self.DeadDinoImg
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x = self.dino_x
+        self.dino_rect.y = self.dino_y
+        
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
