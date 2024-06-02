@@ -19,6 +19,7 @@ def main():
     fps = pygame.time.Clock()
     run = True
     gamespeed = 12
+    death_count = 0
     trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격 (변경 가능)
     last_trap_spawn = pygame.time.get_ticks()
 
@@ -47,7 +48,7 @@ def main():
         # event check
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                exit(1)
                 
         # tree move
         tree.move()
@@ -89,6 +90,16 @@ def main():
         # background
         background()
 
+        # 충돌 조건문
+        if dino.dino_rect.colliderect(tree.rect):
+            pygame.time.delay(300)
+            dino.dino_run = False
+            dino.dino_jump = False
+            dino.dino_duck = False
+            dino.dino_dead = True
+            death_count += 1
+            menu(death_count)
+
         # update
         pygame.display.update()
         fps.tick(30)
@@ -120,7 +131,7 @@ def menu(death_count):
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                exit(1)
             if event.type == pygame.KEYDOWN:
                 main()
 
