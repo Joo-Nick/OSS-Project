@@ -93,7 +93,7 @@ def main():
         background()
 
         # 충돌 조건문
-        if dino.dino_rect.colliderect(tree.rect):
+        if dino.dino_rect.colliderect(tree.rect) or any(dino.dino_rect.colliderect(trap.rect) for trap in traps):
             pygame.time.delay(300)
             dino.dino_run = False
             dino.dino_jump = False
