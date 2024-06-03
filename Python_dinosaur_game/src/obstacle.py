@@ -68,7 +68,7 @@ class Bird(Obstacle):
 class Trap(Obstacle):
     def __init__(self):
         image_path = TRAP_IMAGE_PATH
-        y_pos = y_pos_bg - 20  # -20은 트랩의 높이 보정
+        y_pos = y_pos_bg +5 # +5는 트랩의 높이 보정
         super().__init__(image_path, 800, y_pos, 12)
 
 def manage_obstacles(obstacles_group, last_obstacle_time, current_time):

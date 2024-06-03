@@ -30,7 +30,7 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y
         self.dino_rect.width = 50  # 공룡 rect 너비 조정
-        self.dino_rect.height = 50  # 공룡 rect 높이 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
 
     def dinoupdate(self, userInput):
         if self.dino_duck:
@@ -69,7 +69,7 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y_duck
         self.step_index += 1
-        self.dino_rect.width = 50  # 공룡 rect 너비 조정
+        self.dino_rect.width = 80  # 공룡 rect 너비 조정
         self.dino_rect.height = 50  # 공룡 rect 높이 조정
 
 
@@ -80,7 +80,7 @@ class Dino:
         self.dino_rect.y = self.dino_y
         self.step_index += 1
         self.dino_rect.width = 50  # 공룡 rect 너비 조정
-        self.dino_rect.height = 50  # 공룡 rect 높이 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
 
 
     def jump(self): # 점프
@@ -92,7 +92,7 @@ class Dino:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
         self.dino_rect.width = 50  # 공룡 rect 너비 조정
-        self.dino_rect.height = 50  # 공룡 rect 높이 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
 
     def dead(self):
         self.image = self.DeadDinoImg
