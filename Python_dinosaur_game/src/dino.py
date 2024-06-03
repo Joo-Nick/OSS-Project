@@ -49,6 +49,7 @@ class Dino:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
+            self.dino_rect.y = self.dino_y # 점프키 공중부양 방지
         elif userInput[pygame.K_DOWN] and not self.dino_jump: # 슬라이딩 키 지정
             self.dino_duck = True
             self.dino_run = False
