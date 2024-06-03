@@ -20,8 +20,6 @@ def main():
     run = True
     gamespeed = 12
     death_count = 0
-    trap_spawn_time = random.randint(1000, 5000)  # 1초에서 5초 사이의 랜덤 시간 간격 (변경 가능)
-    last_trap_spawn = pygame.time.get_ticks()
 
     # dino 인스턴스 생성
     dino = Dino()
@@ -52,7 +50,8 @@ def main():
         last_obstacle_time = manage_obstacles(obstacles, last_obstacle_time, current_time)
 
         obstacles.update()
-        obstacles.draw(screen)
+        for obstacle in obstacles:
+            obstacle.draw(screen)
         
         # 현재 시간 체크
         current_time = pygame.time.get_ticks()
