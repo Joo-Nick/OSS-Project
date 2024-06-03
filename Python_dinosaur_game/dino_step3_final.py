@@ -3,7 +3,7 @@ import random
 import sys
 import os
 from src.dino import Dino
-from src.obstacle import Tree, FlyingObstacle
+from src.obstacle import Cactus, Bird, manage_obstacles
 from src.obstacle_random import Trap
 from src.cloud import Cloud
 from src.background import background
@@ -12,6 +12,7 @@ pygame.init()
 pygame.display.set_caption('Jumping dino')
 MAX_WIDTH = 800
 MAX_HEIGHT = 400
+y_pos_bg = 330
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
 def main():
@@ -26,14 +27,14 @@ def main():
     # dino 인스턴스 생성
     dino = Dino()
 
+    # 장애물 그룹 생성
+    obstacles = pygame.sprite.Group()
+
+    # 시간 추적을 위한 변수
+    last_obstacle_time = pygame.time.get_ticks()
+
     # 현재 파일의 디렉토리 경로 가져오기
     base_path = os.path.dirname(__file__)
-
-    # tree 인스턴스 생성
-    tree = Tree(screen, os.path.join(base_path, 'images/Obstacle/Tree.png'))
-
-    # flying_obstacle 인스턴스 생성
-    flying_obstacle = FlyingObstacle(screen, os.path.join(base_path, 'images/Obstacle/FlyingObstacle.png'))
 
     # trap 리스트 생성
     traps = []
@@ -48,19 +49,14 @@ def main():
         # event check
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit(1)
-                
-        # tree move
-        tree.move()
+                run = False
 
-        # draw tree
-        tree.draw()
+        # management obsacle
+        current_time = pygame.time.get_ticks()
+        last_obstacle_time = manage_obstacles(obstacles, last_obstacle_time, current_time)
 
-        # flying obstacle move
-        flying_obstacle.move()
-
-        # draw flying obstacle
-        flying_obstacle.draw()
+        obstacles.update()
+        obstacles.draw(screen)
         
         # 현재 시간 체크
         current_time = pygame.time.get_ticks()
@@ -91,14 +87,15 @@ def main():
         background()
 
         # 충돌 조건문
-        if dino.dino_rect.colliderect(tree.rect):
-            pygame.time.delay(300)
-            dino.dino_run = False
-            dino.dino_jump = False
-            dino.dino_duck = False
-            dino.dino_dead = True
-            death_count += 1
-            menu(death_count)
+        for obstacle in obstacles:
+            if dino.dino_rect.colliderect(obstacle.rect):
+                pygame.time.delay(300)
+                dino.dino_run = False
+                dino.dino_jump = False
+                dino.dino_duck = False
+                dino.dino_dead = True
+                death_count += 1
+                menu(death_count)
 
         # update
         pygame.display.update()
