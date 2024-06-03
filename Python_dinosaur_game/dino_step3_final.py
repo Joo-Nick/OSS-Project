@@ -6,6 +6,7 @@ from src.dino import Dino
 from src.obstacle import Cactus, Bird, Trap, manage_obstacles
 from src.cloud import Cloud
 from src.background import background
+from src.lifemanage import LifeManager  # LifeManager 클래스 추가
 
 pygame.init()
 pygame.display.set_caption('Jumping dino')
@@ -20,14 +21,15 @@ def main():
     run = True
     gamespeed = 12
     death_count = 0
-    trap_spawn_time = random.randint(2000, 5000)  # 2초에서 5초 사이의 랜덤 시간 간격
-    last_trap_spawn = pygame.time.get_ticks()
 
     # dino 인스턴스 생성
     dino = Dino()
 
     # 장애물 그룹 생성
     obstacles = pygame.sprite.Group()
+    
+    # 목숨 관리자 인스턴스 생성
+    lifemanage = LifeManager()
 
     # 시간 추적을 위한 변수
     last_obstacle_time = pygame.time.get_ticks()
@@ -67,17 +69,28 @@ def main():
 
         # background
         background()
+        
+        # 무적 상태 업데이트
+        lifemanage.update_invincibility()  # 수정
 
         # 충돌 조건문
-        for obstacle in obstacles:
-            if dino.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(300)
-                dino.dino_run = False
-                dino.dino_jump = False
-                dino.dino_duck = False
-                dino.dino_dead = True
-                death_count += 1
-                menu(death_count)
+        if not lifemanage.is_invincible():  # 수정: 무적 상태가 아닐 때만 충돌 체크
+            for obstacle in obstacles:
+                if dino.dino_rect.colliderect(obstacle.rect):
+                    pygame.time.delay(300)
+                    lifemanage.lose_life()
+                    if not lifemanage.is_alive():
+                        death_count += 1  # 수정
+                        lifemanage.reset_lives()  # 수정
+                        menu(death_count)  # 수정
+                    break  # 충돌 후 게임은 계속 진행되며 목숨만 줄어듦 # 수정
+
+
+                
+        # 목숨 정보 표시
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        lives_text = font.render(f'Life: {lifemanage.get_lives()}', True, (0, 0, 0))
+        screen.blit(lives_text, (10, 10))
 
         # update
         pygame.display.update()
@@ -100,6 +113,7 @@ def menu(death_count):
             screen.blit(text, textRect)
             screen.blit(RunDino, (MAX_WIDTH // 2 - 20, MAX_HEIGHT // 2 - 140))
         elif death_count > 0:
+            screen.fill((255, 255, 255))  # 수정: 게임오버 화면 초기화
             gameoverRect = GameoverImg.get_rect()
             gameoverRect.center = (MAX_WIDTH // 2, MAX_HEIGHT // 2 - 50)
             resetRect = ResetImg.get_rect()
