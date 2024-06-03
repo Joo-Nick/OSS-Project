@@ -54,7 +54,8 @@ def main():
         last_obstacle_time = manage_obstacles(obstacles, last_obstacle_time, current_time)
 
         obstacles.update()
-        obstacles.draw(screen)
+        for obstacle in obstacles:
+            obstacle.draw(screen)
         
         # 현재 시간 체크
         current_time = pygame.time.get_ticks()
