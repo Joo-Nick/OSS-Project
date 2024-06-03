@@ -7,6 +7,7 @@ from src.obstacle import Cactus, Bird, Trap, manage_obstacles
 from src.cloud import Cloud
 from src.background import background
 from src.lifemanage import LifeManager
+from src.levelmanage import LevelManager
 
 pygame.init()
 pygame.display.set_caption('Jumping dino')
@@ -30,6 +31,9 @@ def main():
     
     # 목숨 관리자 인스턴스 생성
     lifemanage = LifeManager() 
+
+    # 레벨 관리자 인스턴스 생성
+    levelmanage = LevelManager()
 
     # 시간 추적을 위한 변수
     last_obstacle_time = pygame.time.get_ticks()
@@ -57,7 +61,10 @@ def main():
         current_time = pygame.time.get_ticks()
         last_obstacle_time = manage_obstacles(obstacles, last_obstacle_time, current_time)
 
-        obstacles.update()
+        # 게임 속도 업데이트 (레벨에 따라 5씩 증가)
+        gamespeed = 12 + levelmanage.get_level() * 5
+
+        obstacles.update(gamespeed)
         for obstacle in obstacles:
             obstacle.draw(screen)
         
@@ -102,7 +109,13 @@ def main():
         elapsed_time = current_time - start_time
         score = elapsed_time // 100
         score_text = font.render(f'Score: {score}', True, (0, 0, 0))
-        screen.blit(score_text, (MAX_WIDTH - 100, 30))
+        score_text_rect = score_text.get_rect(center=(MAX_WIDTH // 2, 30)) # 화면 중앙에 표시
+        screen.blit(score_text, score_text_rect.topleft)
+
+        # 레벨 업데이트
+        levelmanage.update_level(score)
+        level_text = font.render(f'Lv: {levelmanage.get_level()}', True, (0, 0, 0))
+        screen.blit(level_text, (10, 40))  # 목숨 정보 아래에 레벨 표시
 
         # update
         pygame.display.update()
