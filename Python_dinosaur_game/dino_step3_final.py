@@ -39,6 +39,10 @@ def main():
 
     # Cloud 인스턴스 생성
     cloud = Cloud()
+    
+    # 타이머 변수
+    start_time = pygame.time.get_ticks()
+    score = 0
 
     while run:
         screen.fill((255, 255, 255))
@@ -92,6 +96,13 @@ def main():
         font = pygame.font.Font('freesansbold.ttf', 20)
         lives_text = font.render(f'Life: {lifemanage.get_lives()}', True, (0, 0, 0))
         screen.blit(lives_text, (10, 10))
+        
+        # 점수 업데이트 (시간 기반)
+        current_time = pygame.time.get_ticks()
+        elapsed_time = current_time - start_time
+        score = elapsed_time // 100
+        score_text = font.render(f'Score: {score}', True, (0, 0, 0))
+        screen.blit(score_text, (MAX_WIDTH - 100, 30))
 
         # update
         pygame.display.update()
