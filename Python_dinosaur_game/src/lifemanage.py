@@ -2,7 +2,7 @@ import pygame
 import os
 
 # 게임의 목숨을 관리
-
+# 장애물과 충돌시 잠시 무적이 되어 연속 충돌을 방지
 class LifeManager:
     def __init__(self, initial_lives=3):
         self.lives = initial_lives

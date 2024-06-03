@@ -6,7 +6,7 @@ from src.dino import Dino
 from src.obstacle import Cactus, Bird, Trap, manage_obstacles
 from src.cloud import Cloud
 from src.background import background
-from src.lifemanage import LifeManager  # LifeManager 클래스 추가
+from src.lifemanage import LifeManager
 
 pygame.init()
 pygame.display.set_caption('Jumping dino')
@@ -29,7 +29,7 @@ def main():
     obstacles = pygame.sprite.Group()
     
     # 목숨 관리자 인스턴스 생성
-    lifemanage = LifeManager()
+    lifemanage = LifeManager() 
 
     # 시간 추적을 위한 변수
     last_obstacle_time = pygame.time.get_ticks()
@@ -71,19 +71,19 @@ def main():
         background()
         
         # 무적 상태 업데이트
-        lifemanage.update_invincibility()  # 수정
+        lifemanage.update_invincibility()
 
         # 충돌 조건문
-        if not lifemanage.is_invincible():  # 수정: 무적 상태가 아닐 때만 충돌 체크
+        if not lifemanage.is_invincible(): 
             for obstacle in obstacles:
                 if dino.dino_rect.colliderect(obstacle.rect):
                     pygame.time.delay(300)
                     lifemanage.lose_life()
                     if not lifemanage.is_alive():
-                        death_count += 1  # 수정
-                        lifemanage.reset_lives()  # 수정
-                        menu(death_count)  # 수정
-                    break  # 충돌 후 게임은 계속 진행되며 목숨만 줄어듦 # 수정
+                        death_count += 1  
+                        lifemanage.reset_lives()  
+                        menu(death_count) 
+                    break
 
 
                 
