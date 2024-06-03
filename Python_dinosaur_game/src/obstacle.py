@@ -1,29 +1,33 @@
 import pygame
 import random
+import os
+
+# 현재 파일의 디렉토리 경로 가져오기
+base_path = os.path.dirname(__file__)
 
 # 이미지 경로
 BIRD_IMAGE_PATHS = [
-    'Python_dinosaur_game/images/Obstacle/Bird/Bird1.png', 
-    'Python_dinosaur_game/images/Obstacle/Bird/Bird2.png'
+    os.path.join(base_path, '../images/Obstacle/Bird/Bird1.png'), 
+    os.path.join(base_path, '../images/Obstacle/Bird/Bird2.png')
 ]
 
 CACTUS_IMAGE_PATHS = [
-    'Python_dinosaur_game/images/Obstacle/Cactus/LargeCactus1.png', 
-    'Python_dinosaur_game/images/Obstacle/Cactus/LargeCactus2.png', 
-    'Python_dinosaur_game/images/Obstacle/Cactus/LargeCactus3.png', 
-    'Python_dinosaur_game/images/Obstacle/Cactus/SmallCactus1.png', 
-    'Python_dinosaur_game/images/Obstacle/Cactus/SmallCactus2.png', 
-    'Python_dinosaur_game/images/Obstacle/Cactus/SmallCactus3.png'
+    os.path.join(base_path, '../images/Obstacle/Cactus/LargeCactus1.png'), 
+    os.path.join(base_path, '../images/Obstacle/Cactus/LargeCactus2.png'), 
+    os.path.join(base_path, '../images/Obstacle/Cactus/LargeCactus3.png'), 
+    os.path.join(base_path, '../images/Obstacle/Cactus/SmallCactus1.png'), 
+    os.path.join(base_path, '../images/Obstacle/Cactus/SmallCactus2.png'), 
+    os.path.join(base_path, '../images/Obstacle/Cactus/SmallCactus3.png')
 ]
 
-TRAP_IMAGE_PATH = 'Python_dinosaur_game/images/Obstacle/Trap.png'
+TRAP_IMAGE_PATH = os.path.join(base_path, '../images/Obstacle/Trap.png')
 
 y_pos_bg = 330 # src/background.py의 Track에 대한 높이
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, image_path, x_pos, y_pos, speed):
         super().__init__()
-        self.image = pygame.image.load(image_path) 
+        self.image = pygame.image.load(image_path)
         self.rect = self.image.get_rect(topleft=(x_pos, y_pos)) # 이미지 좌표설정 및 충돌영역 초기화
         self.speed = speed
 
