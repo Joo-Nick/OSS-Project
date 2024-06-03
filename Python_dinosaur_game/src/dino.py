@@ -5,7 +5,7 @@ class Dino:
     dino_x = 10
     dino_y = 265
     dino_y_duck = 295
-    JUMP_VEL = 6.5
+    JUMP_VEL = 7.5
 
     def __init__(self):
         base_path = os.path.dirname(__file__)
@@ -29,6 +29,8 @@ class Dino:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y
+        self.dino_rect.width = 50  # 공룡 rect 너비 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
 
     def dinoupdate(self, userInput):
         if self.dino_duck:
@@ -51,6 +53,11 @@ class Dino:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
+        elif self.dino_jump and userInput[pygame.K_DOWN]:
+            self.dino_rect.y += self.jump_vel * 4  # 내려오는 속도 크게 증가
+            self.jump_vel -= 1.0
+            self.dino_run = False
+            self.dino_duck = True
         elif not (self.dino_jump or userInput[pygame.K_DOWN]):
             self.dino_duck = False
             self.dino_run = True
@@ -62,6 +69,9 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y_duck
         self.step_index += 1
+        self.dino_rect.width = 80  # 공룡 rect 너비 조정
+        self.dino_rect.height = 50  # 공룡 rect 높이 조정
+
 
     def run(self): # 달리기
         self.image = self.RunDinoImg[self.step_index // 5]
@@ -69,6 +79,9 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y
         self.step_index += 1
+        self.dino_rect.width = 50  # 공룡 rect 너비 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
+
 
     def jump(self): # 점프
         self.image = self.JumpDinoImg
@@ -78,6 +91,9 @@ class Dino:
         if self.jump_vel < - self.JUMP_VEL:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
+        self.dino_rect.width = 50  # 공룡 rect 너비 조정
+        self.dino_rect.height = 80  # 공룡 rect 높이 조정
+
     def dead(self):
         self.image = self.DeadDinoImg
         self.dino_rect = self.image.get_rect()
@@ -86,3 +102,4 @@ class Dino:
         
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+        pygame.draw.rect(SCREEN, (255, 0, 0), self.dino_rect, 2)  # 공룡 rect 그리기
