@@ -3,8 +3,7 @@ import random
 import sys
 import os
 from src.dino import Dino
-from src.obstacle import Cactus, Bird, manage_obstacles
-from src.obstacle_random import Trap
+from src.obstacle import Cactus, Bird, Trap, manage_obstacles
 from src.cloud import Cloud
 from src.background import background
 
@@ -36,9 +35,6 @@ def main():
     # 현재 파일의 디렉토리 경로 가져오기
     base_path = os.path.dirname(__file__)
 
-    # trap 리스트 생성
-    traps = []
-    
     # Cloud 인스턴스 생성
     cloud = Cloud()
 
@@ -61,20 +57,6 @@ def main():
         # 현재 시간 체크
         current_time = pygame.time.get_ticks()
         
-        # trap 생성
-        if current_time - last_trap_spawn > trap_spawn_time:
-            new_trap = Trap(screen, 'Python_dinosaur_game/images/Obstacle/Trap.png')
-            traps.append(new_trap)
-            last_trap_spawn = current_time
-            trap_spawn_time = random.randint(1000, 5000)  # 다음 트랩 생성 시간 갱신
-
-        # trap move and draw
-        for trap in traps[:]:
-            if not trap.move_random():
-                traps.remove(trap)
-            else:
-                trap.draw_random()
-                
         # draw dino
         dino.draw(screen)
         dino.dinoupdate(userinput)
