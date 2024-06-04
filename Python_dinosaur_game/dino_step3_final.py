@@ -126,6 +126,7 @@ def menu(death_count):
     base_path = os.path.dirname(__file__)
     while run:
         font = pygame.font.Font('freesansbold.ttf', 30)
+        small_font = pygame.font.Font('freesansbold.ttf', 20)  # 추가: 작은 글씨체 설정
         RunDino = pygame.image.load(os.path.join(base_path, 'images/Dino/DinoRun1.png'))
         GameoverImg = pygame.image.load(os.path.join(base_path, 'images/Other/Gameover.png'))
         ResetImg = pygame.image.load(os.path.join(base_path, 'images/Other/Reset.png'))
@@ -146,11 +147,25 @@ def menu(death_count):
             screen.blit(GameoverImg, gameoverRect)
             screen.blit(ResetImg, resetRect)
 
+            # 추가: "Press any Key to RESTART" 문구 표시
+            restart_text1 = small_font.render("or", True, (0, 0, 0))
+            restart_text2 = small_font.render("Press any Key to RESTART", True, (0, 0, 0))
+
+            restart_text1_rect = restart_text1.get_rect(center=(MAX_WIDTH // 2, MAX_HEIGHT // 2 + 100))
+            restart_text2_rect = restart_text2.get_rect(center=(MAX_WIDTH // 2, MAX_HEIGHT // 2 + 130))
+
+            screen.blit(restart_text1, restart_text1_rect.topleft)
+            screen.blit(restart_text2, restart_text2_rect.topleft)
+
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(1)
             if event.type == pygame.KEYDOWN:
                 main()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if resetRect.collidepoint(mouse_pos): # restart 이미지 클릭하면 재시작
+                    main()
 
 menu(death_count=0)
