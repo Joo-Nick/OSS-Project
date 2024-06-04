@@ -100,6 +100,7 @@ class Dino:
         self.dino_rect.x = self.dino_x
         self.dino_rect.y = self.dino_y
         
-    def draw(self, SCREEN):
+    def draw(self, SCREEN, show_hitbox):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
-        pygame.draw.rect(SCREEN, (255, 0, 0), self.dino_rect, 2)  # 공룡 rect 그리기
+        if show_hitbox:
+            pygame.draw.rect(SCREEN, (255, 0, 0), self.dino_rect, 2)  # 공룡 rect 그리기
