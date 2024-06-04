@@ -31,8 +31,9 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x_pos, y_pos)) # 이미지 좌표설정 및 충돌영역 초기화
         self.speed = speed
 
-    def update(self):
-        self.rect.x -= self.speed # 왼쪽으로 진행
+    def update(self, *args):
+        gamespeed = args[0] if args else 1  # 인자가 전달되면 gamespeed 설정, 아니면 기본값 1
+        self.rect.x -= gamespeed  # 왼쪽으로 진행, gamespeed를 곱하여 게임 속도 조절
         if self.rect.right < 0:  # 화면 왼쪽으로 완전히 사라지면
             self.kill() # 장애물을 스프라이트 그룹에서 제거
             
@@ -47,6 +48,9 @@ class Cactus(Obstacle):
         y_pos = y_pos_bg - image.get_rect().height + 10 # + 10은 Track.png의 공백에 대한 보정
         super().__init__(image_path, 800, y_pos, 12)
 
+    def update(self, gamespeed):
+        return super().update(gamespeed)
+
 class Bird(Obstacle):
     def __init__(self):
         self.image_paths = BIRD_IMAGE_PATHS  # 이미지 경로 목록
@@ -57,19 +61,22 @@ class Bird(Obstacle):
         super().__init__(image_path, 800, y_pos, 17)
         self.animation_time = 0  # 애니메이션 시간 초기화
 
-    def update(self):
+    def update(self, gamespeed):
         # Bird의 이미지 애니메이션 효과 목적
         self.animation_time += 1
         if self.animation_time % 5 == 0:  # 이미지 교체 속도 조절
             self.current_image_index = (self.current_image_index + 1) % len(self.image_paths)
             self.image = pygame.image.load(self.image_paths[self.current_image_index])
-        super().update()  # 부모 클래스의 update 메서드 호출
+        super().update(gamespeed)  # 부모 클래스의 update 메서드 호출
         
 class Trap(Obstacle):
     def __init__(self):
         image_path = TRAP_IMAGE_PATH
         y_pos = y_pos_bg +5 # +5는 트랩의 높이 보정
         super().__init__(image_path, 800, y_pos, 12)
+
+    def update(self, gamespeed):
+        return super().update(gamespeed)
 
 def manage_obstacles(obstacles_group, last_obstacle_time, current_time):
     # 장애물 생성 관리 목적
