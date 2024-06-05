@@ -37,9 +37,10 @@ class Obstacle(pygame.sprite.Sprite):
         if self.rect.right < 0:  # 화면 왼쪽으로 완전히 사라지면
             self.kill() # 장애물을 스프라이트 그룹에서 제거
             
-    def draw(self, screen):
+    def draw(self, screen, show_hitbox):
         screen.blit(self.image, self.rect.topleft)
-        pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)  # 충돌영역 표시 및 색상
+        if show_hitbox:
+            pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)  # 충돌영역 표시 및 색상
 
 class Cactus(Obstacle):
     def __init__(self):

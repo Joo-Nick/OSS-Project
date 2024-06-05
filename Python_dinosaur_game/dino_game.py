@@ -16,7 +16,11 @@ MAX_HEIGHT = 400
 y_pos_bg = 330
 screen = pygame.display.set_mode((MAX_WIDTH, MAX_HEIGHT))
 
+show_hitbox = False
+
 def main():
+    global show_hitbox
+    
     # 초기 설정
     clock = pygame.time.Clock()
     run_game = True
@@ -55,9 +59,13 @@ def main():
 
 # 이벤트 처리 함수
 def handle_events():
+    global show_hitbox
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                show_hitbox = not show_hitbox
     return True
 
 # 레벨별 게임속도 증가
@@ -72,9 +80,9 @@ def update_screen(dino, cloud, obstacles, life_manager, level_manager, start_tim
 
     obstacles.update(update_game_speed(level_manager))
     for obstacle in obstacles:
-        obstacle.draw(screen)
+        obstacle.draw(screen, show_hitbox)
 
-    dino.draw(screen)
+    dino.draw(screen, show_hitbox)
     dino.dinoupdate(user_input)
 
     cloud.draw(screen)
@@ -94,7 +102,7 @@ def check_collisions(dino, obstacles, life_manager):
                 return True
     return False
 
-# 정보 표시: 잔여생명, 점수, 레벨
+# 정보 표시: 잔여생명, 점수, 레벨, 히트박스 온오프
 def display_info(life_manager, level_manager, start_time):
     font = pygame.font.Font('freesansbold.ttf', 20)
 
@@ -110,6 +118,9 @@ def display_info(life_manager, level_manager, start_time):
     level_manager.update_level(score)
     level_text = font.render(f'Lv: {level_manager.get_level()}', True, (0, 0, 0))
     screen.blit(level_text, (10, 40))
+    
+    hitbox_text = font.render(f'Hitbox: {"ON" if show_hitbox else "OFF"}  push P', True, (0, 0, 0))
+    screen.blit(hitbox_text, (10, 70))
 
 def menu(death_count):
     run = True
@@ -148,7 +159,7 @@ def menu(death_count):
             if event.type == pygame.KEYDOWN:
                 main()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if reset_rect.collidepoint(event.pos):
+                if death_count > 0 and reset_rect is not None and reset_rect.collidepoint(event.pos):
                     main()
 
 menu(death_count=0)
